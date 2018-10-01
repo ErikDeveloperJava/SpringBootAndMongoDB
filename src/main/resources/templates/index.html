@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Main</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/resources/table/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/resources/table/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/resources/table/vendor/animate/animate.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/resources/table/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/resources/table/vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/resources/table/css/util.css">
+	<link rel="stylesheet" type="text/css" href="/resources/table/css/main.css">
+<!--===============================================================================================-->
+</head>
+<body>
+<div style="display: flex">
+	<p th:text="${user.name} + ' ' + ${user.surname}"></p>
+	<a style="margin-left: 1195px" href="/logout">Logout</a>
+</div>
+	<div class="limiter">
+		<div class="container-table100">
+			<div class="wrap-table100">
+
+				<div class="table100 ver2 m-b-110">
+					<table data-vertable="ver2">
+						<thead>
+							<tr class="row100 head">
+								<th class="column100 column2" data-column="column2">Title</th>
+								<th class="column100 column3" data-column="column3">Description</th>
+								<th class="column100 column4" data-column="column4">Price</th>
+								<th class="column100 column5" data-column="column5">CreatedDate</th>
+								<th class="column100 column6" data-column="column6">Author</th>
+								<th class="column100 column8" data-column="column8">Update</th>
+								<th class="column100 column7" data-column="column7">Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+
+								<th:block th:each="book : ${books}">
+									<tr class="row100">
+										<td class="column100 column1" data-column="column1" th:text="${book.title}">title</td>
+										<td class="column100 column1" data-column="column1" th:text="${book.description}">description</td>
+										<td class="column100 column1" data-column="column1" th:text="${book.price}">Price</td>
+										<td class="column100 column1" data-column="column1" th:text="${#dates.format(book.createdDate,'dd.MM.yyyy HH:mm')}">created date</td>
+										<td class="column100 column1" data-column="column1" th:text="${book.user.name} + ' ' + ${book.user.surname}">author</td>
+										<th:block th:if="${book.user.id} eq ${user.id}">
+											<td class="column100 column1" data-column="column1">
+												<a th:href="@{/book/{id}/delete(id = ${book.id})}">delete</a>
+											</td>
+											<td class="column100 column1" data-column="column1">
+												<a th:href="@{/book/{id}/update(id = ${book.id})}">Update</a>
+											</td>
+										</th:block>
+									</tr>
+								</th:block>
+						</tbody>
+					</table>
+				</div>
+				<div style="margin-left: 500px;" class="pagination" th:if="${paginationLength > 1}">
+					<a th:if="${currentPage eq 0}" style="cursor: pointer">&laquo;</a>
+					<a th:if="${currentPage > 0}" th:href="@{/(page=${currentPage})}">&laquo;</a>
+					<a th:if="${currentPage -2 > 0}" href="/?page=1">1</a>
+					<a th:if="${currentPage -2 > 0}" style="cursor: pointer">...</a>
+					<a th:if="${currentPage -2 > -1}" th:href="@{/(page = ${currentPage - 1})}" th:text="${currentPage - 1}">page</a>
+					<a th:if="${currentPage -1 > -1}" th:href="@{/(page = ${currentPage})}" th:text="${currentPage}">page</a>
+					<a style="cursor: pointer;color: #ef2b33" th:text="${currentPage + 1}">currentPage</a>
+					<a th:if="${currentPage + 1} < ${paginationLength}" th:href="@{/(page = ${currentPage + 2})}" th:text="${currentPage + 2}">page</a>
+					<a th:if="${currentPage + 2} < ${paginationLength}" th:href="@{/(page = ${currentPage + 3})}" th:text="${currentPage + 3}">page</a>
+					<a th:if="${currentPage + 2} < ${paginationLength -1}" style="cursor: pointer">...</a>
+					<a th:if="${currentPage + 2} < ${paginationLength -1}" style="cursor: pointer" th:text="${paginationLength}">...</a>
+					<a th:if="${currentPage} eq ${paginationLength - 1}" style="cursor: pointer">&raquo;</a>
+					<a th:if="${currentPage} < ${paginationLength - 1}" th:href="@{/(page = ${currentPage + 2})}">&raquo;</a>
+				</div>
+			</div>
+
+			<div class="container">
+				<h2>Add Book</h2>
+				<form th:action="@{${action}}" method="post" th:object="${bookForm}">
+					<input type="hidden" name="id" th:value="*{id}">
+					<div class="form-group">
+						<span style="color: red" th:errors="*{title}">Title</span><br/>
+						<label for="title">title:</label>
+						<input type="text" id="title" class="form-control" placeholder="Title..." th:field="*{title}">
+					</div>
+					<div class="form-group">
+						<span style="color: red" th:errors="*{description}">Description</span><br/>
+						<label for="description">Description:</label>
+						<textarea id="description" class="form-control" placeholder="description..." th:field="*{description}"></textarea>
+					</div>
+					<div class="form-group">
+						<span style="color: red" th:errors="*{price}">Price</span><br/>
+						<label for="price">Price:</label>
+						<input type="number" id="price" class="form-control" placeholder="Price..." th:field="*{price}">
+					</div>
+					<button type="submit" class="btn btn-success">Add</button>
+				</form>
+			</div>
+		</div>
+	</div>
+<!--===============================================================================================-->
+	<script src="/resources/table/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/resources/table/vendor/bootstrap/js/popper.js"></script>
+	<script src="/resources/table/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/resources/table/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/resources/table/js/main.js"></script>
+
+</body>
+</html>

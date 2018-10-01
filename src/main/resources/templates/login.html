@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Colorlib Templates">
+    <meta name="author" content="Colorlib">
+    <meta name="keywords" content="Colorlib Templates">
+
+    <!-- Title Page-->
+    <title>Login/Register</title>
+    <script src="/resources/vendor/jquery/jquery.min.js"></script>
+
+    <!-- Icons font CSS-->
+    <link href="/resources/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+    <link href="/resources/vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
+    <!-- Vendor CSS-->
+    <link href="/resources/vendor/select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="/resources/vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
+
+    <!-- Main CSS-->
+    <link href="/resources/css/main.css" rel="stylesheet" media="all">
+    <style>
+        .active_{
+            color: #da0797;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#register").on("click",function () {
+                var clazz = $(this).attr("class");
+                if(clazz != "active_"){
+                    $("#register").attr("class","active_");
+                    $("#login").attr("class","");
+                    $("#login-form").hide();
+                    $("#register-form").show();
+                }
+            });
+            $("#login").on("click",function () {
+                var clazz = $(this).attr("class");
+                if(clazz != "active_"){
+                    $("#login").attr("class","active_");
+                    $("#register").attr("class","");
+                    $("#register-form").hide();
+                    $("#login-form").show();
+                }
+            });
+        })
+    </script>
+</head>
+
+<body>
+<div class="page-wrapper bg-gra-01 p-t-180 p-b-100 font-poppins">
+    <div class="wrapper wrapper--w780">
+        <div class="card card-3">
+            <div class="card-heading"></div>
+            <div class="card-body">
+                <th:block th:if="${#strings.equals(#request.getRequestURI(),'/')}">
+
+                    <h2 class="title">
+                        <a style="cursor: pointer" id="login" class="active_">Login</a>/
+                        <a style="cursor: pointer" id="register">Register</a>
+                    </h2>
+                    <form id="register-form" action="/register" style="display: none" method="POST" th:object="${userForm}">
+                        <div class="input-group">
+                            <span style="color: red" th:errors="*{name}"></span>
+                            <br/>
+                            <input class="input--style-3" type="text" placeholder="Name.." th:field="*{name}">
+                        </div>
+                        <div class="input-group">
+                            <span style="color: red" th:errors="*{surname}"></span>
+                            <br/>
+                            <input class="input--style-3" type="text" placeholder="Surname.." th:field="*{surname}">
+                        </div>
+                        <div class="input-group">
+                            <span style="color: red" th:errors="*{email}"></span>
+                            <br/>
+                            <input class="input--style-3" type="text" placeholder="Email.." th:field="*{email}">
+                        </div>
+                        <div class="input-group">
+                            <span style="color: red" th:errors="*{password}"></span>
+                            <br/>
+                            <input class="input--style-3" type="password" placeholder="Password.." th:field="*{password}">
+                        </div>
+                        <div class="input-group">
+                            <span style="color: red" th:errors="*{birthDate}"></span>
+                            <br/>
+                            <input class="input--style-3 js-datepicker" type="text" placeholder="Birth date..." th:field="*{birthDate}">
+                            <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+                        </div>
+                        <div class="p-t-10">
+                            <button class="btn btn--pill btn--green" type="submit">Register</button>
+                        </div>
+                    </form>
+                    <form id="login-form" action="/login" method="POST" >
+                        <p th:if="${#request.getParameter('error') ne null}" style="color: red">You entered wrong email or password</p>
+                        <br/>
+                        <div class="input-group">
+                            <input class="input--style-3" type="text" placeholder="Email.." name="email">
+                        </div>
+                        <div class="input-group">
+                            <input class="input--style-3" type="password" placeholder="Password.." name="password">
+                        </div>
+                        <div class="p-t-10">
+                            <button class="btn btn--pill btn--green" type="submit">Login</button>
+                        </div>
+                    </form>
+                </th:block>
+                <th:block th:if="${#strings.equals(#request.getRequestURI(),'/register')}">
+
+                    <h2 class="title">
+                        <a style="cursor: pointer" id="login" >Login</a>/
+                        <a style="cursor: pointer" id="register" class="active_">Register</a>
+                    </h2>
+                    <form id="register-form" action="/register"  method="POST" th:object="${userForm}">
+                        <div class="input-group">
+                            <span style="color: red" th:errors="*{name}"></span>
+                            <br/>
+                            <input class="input--style-3" type="text" placeholder="Name.." th:field="*{name}">
+                        </div>
+                        <div class="input-group">
+                            <span style="color: red" th:errors="*{surname}"></span>
+                            <br/>
+                            <input class="input--style-3" type="text" placeholder="Surname.." th:field="*{surname}">
+                        </div>
+                        <div class="input-group">
+                            <span style="color: red" th:errors="*{email}"></span>
+                            <br/>
+                            <input class="input--style-3" type="text" placeholder="Email.." th:field="*{email}">
+                        </div>
+                        <div class="input-group">
+                            <span style="color: red" th:errors="*{password}"></span>
+                            <br/>
+                            <input class="input--style-3" type="password" placeholder="Password.." th:field="*{password}">
+                        </div>
+                        <div class="input-group">
+                            <span style="color: red" th:errors="*{birthDate}"></span>
+                            <br/>
+                            <input class="input--style-3 js-datepicker" type="text" placeholder="Birth date..." th:field="*{birthDate}">
+                            <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+                        </div>
+                        <div class="p-t-10">
+                            <button class="btn btn--pill btn--green" type="submit">Register</button>
+                        </div>
+                    </form>
+                    <form id="login-form" style="display: none" action="/login" method="POST" >
+                        <p th:if="${#request.getParameter('error') ne null}" style="color: red">You entered wrong email or password</p>
+                        <br/>
+                        <div class="input-group">
+                            <input class="input--style-3" type="text" placeholder="Email.." name="email">
+                        </div>
+                        <div class="input-group">
+                            <input class="input--style-3" type="password" placeholder="Password.." name="password">
+                        </div>
+                        <div class="p-t-10">
+                            <button class="btn btn--pill btn--green" type="submit">Login</button>
+                        </div>
+                    </form>
+                </th:block>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Jquery JS-->
+<!-- Vendor JS-->
+<script src="/resources/vendor/select2/select2.min.js"></script>
+<script src="/resources/vendor/datepicker/moment.min.js"></script>
+<script src="/resources/vendor/datepicker/daterangepicker.js"></script>
+
+<!-- Main JS-->
+<script src="/resources/js/global.js"></script>
+
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+
+</html>
+<!-- end document-->
